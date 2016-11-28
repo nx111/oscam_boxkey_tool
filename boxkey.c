@@ -195,6 +195,7 @@ int getBoxkey_dvn(FILE *fp)
 	struct twofish_ctx ctx;
 
 	twofish_setkey(&ctx, dvn_vendor_key, sizeof(dvn_vendor_key));
+	bLine[0] = '\0';
 
 	for(i = j = 0;!feof(fp);){
 		last = ch;
@@ -257,7 +258,7 @@ int getBoxkey_dvn(FILE *fp)
 				{
 					buf[0] = decrypted;
 
-					if(request_change_vendorkey && !memcmp(buf + 1,"\x42\x20",2) && buf[0] == 48 && bLine[0] == 16){
+					if(request_change_vendorkey && !memcmp(buf + 1,"\x42\x20",2) && buf[0] == 48){
 						int m;
 						memcpy(dvn_vendor_key, buf + 4 + 1, 32);
 						twofish_setkey(&ctx, dvn_vendor_key, sizeof(dvn_vendor_key));
@@ -308,6 +309,7 @@ int getBoxkey_dvn(FILE *fp)
 			for(k=0;k<5;k++)
 				temp[k] = temp[j-4+k];
 			j = 4;
+			bLine[0] = '\0';
 		}
 
 		i++;
